@@ -1,0 +1,21 @@
+{templateType ApiGen\Renderer\Latte\Template\NamespaceTemplate}
+{import '../blocks/@index.latte'}
+
+{embed layout}
+	{block title}{if $pakage->name->full !== ''}Package {$package->name->full}{else}No package{/if}{/block}
+
+	{block content}
+		<h1>{if $package->name->full !== ''}Package {include packageLinks, $package}{else}No package{/if}</h1>
+
+		{embed elementSummary}
+			{block elementSummaryContent}
+				{include elementSummaryGroup, heading: 'Classes', elements: $namespace->class, onlyPrimary: $namespace->primary}
+				{include elementSummaryGroup, heading: 'Interfaces', elements: $namespace->interface, onlyPrimary: $namespace->primary}
+				{include elementSummaryGroup, heading: 'Traits', elements: $namespace->trait, onlyPrimary: $namespace->primary}
+				{include elementSummaryGroup, heading: 'Enums', elements: $namespace->enum, onlyPrimary: $namespace->primary}
+				{include elementSummaryGroup, heading: 'Exceptions', elements: $namespace->exception, onlyPrimary: $namespace->primary}
+				{include elementSummaryGroup, heading: 'Functions', elements: $namespace->function, onlyPrimary: $namespace->primary}
+			{/block}
+		{/embed}
+	{/block}
+{/embed}

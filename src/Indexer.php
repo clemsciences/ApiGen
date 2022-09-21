@@ -5,6 +5,7 @@ namespace ApiGen;
 use ApiGen\Index\FileIndex;
 use ApiGen\Index\Index;
 use ApiGen\Index\NamespaceIndex;
+use ApiGen\Index\PackageIndex;
 use ApiGen\Info\ClassInfo;
 use ApiGen\Info\ClassLikeInfo;
 use ApiGen\Info\EnumInfo;
@@ -24,6 +25,41 @@ use function ksort;
 
 class Indexer
 {
+
+    public function indexPackage(Index $index, string $packageName, bool $primary, bool $deprecated): void {
+        if (isset($index->package[$packageName] )) {
+            if($primary) {
+                for(
+                    $info = $index->package[$packageName];
+                    $info !== null && !$info->primary;
+                    $info = $info->name->full === '' ? null : $index->package[$info->name->full]
+                ) {
+                    $info->primary = true;
+                }
+            }
+            if(!$deprecated) {
+                for(
+                    $info = $index->package[$packageName];
+                    $info !== null && $info->deprecated;
+                    $info = $info->name->full === '' ? null : $index->package[$info->name->full]
+                ) {
+                    $info->deprecated = false;
+                }
+            }
+            return;
+        }
+        $info = new PackageIndex(new NameInfo($packageName), $primary, $deprecated);
+
+        if($packageName !== '') {
+            $primary = $primary && $info->name->full !== '';
+            $deprecated = $deprecated && $info->name->full !== '';
+            $this->indexPackage($index, $info->name->full, $primary, $deprecated);
+        }
+
+        $index->namespace[$packageName] = $info;
+        $index->namespace[$info->name->namespaceLower]->children[$info->name->full] = $info;
+    }
+
 	public function indexFile(Index $index, ?string $file, bool $primary): void
 	{
 		if ($file === null) {

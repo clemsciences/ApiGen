@@ -137,8 +137,10 @@ class ApiGen
 
 		foreach ($analyzeResult->function as $info) {
 			$this->indexer->indexFile($index, $info->file, $info->primary);
+            $this->indexer->indexPackage($index, $info->name->full, $info->primary, $info->isDeprecated());
 			$this->indexer->indexNamespace($index, $info->name->namespace, $info->name->namespaceLower, $info->primary, $info->isDeprecated());
 			$this->indexer->indexFunction($index, $info);
+
 		}
 
 		$this->indexer->postProcess($index);
