@@ -12,7 +12,7 @@ class PackageTemplate
         public Index $index,
         public ConfigParameters $config,
         public LayoutParameters $layout,
-        public PackageIndex $namespace,
+        public PackageIndex $package,
     ) {
     }
 }

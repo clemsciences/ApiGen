@@ -33,6 +33,7 @@ class LatteExtension extends Latte\Extension
 
 			'treePageExists' => $this->filter->filterTreePage(...),
 			'namespacePageExists' => $this->filter->filterNamespacePage(...),
+			'packagePageExists' => $this->filter->filterPackagePage(...),
 			'classLikePageExists' => $this->filter->filterClassLikePage(...),
 			'functionPageExists' => $this->filter->filterFunctionPage(...),
 			'sourcePageExists' => $this->filter->filterSourcePage(...),

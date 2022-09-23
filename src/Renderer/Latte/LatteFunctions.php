@@ -3,6 +3,7 @@
 namespace ApiGen\Renderer\Latte;
 
 use ApiGen\Index\NamespaceIndex;
+use ApiGen\Index\PackageIndex;
 use ApiGen\Info\ClassInfo;
 use ApiGen\Info\ClassLikeInfo;
 use ApiGen\Info\ElementInfo;
@@ -132,7 +133,10 @@ class LatteFunctions
 		} elseif ($info instanceof FunctionInfo) {
 			return $this->filter->filterFunctionPage($info);
 
-		} else {
+		} elseif ($info instanceof PackageIndex) {
+			return $this->filter->filterPackagePage($info);
+
+ 		} else {
 			throw new \LogicException(sprintf('Unexpected element type %s', get_debug_type($info)));
 		}
 	}

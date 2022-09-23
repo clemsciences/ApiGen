@@ -2,6 +2,12 @@
 {varType ApiGen\Renderer\Latte\Template\ConfigParameters $config}
 {varType ApiGen\Renderer\Latte\Template\LayoutParameters $layout}
 
+{define menuPackageGroup, ApiGen\Index\PackageIndex $package, int $level = 0}
+	<ul>
+		Package?
+	</ul>
+{/define}
+
 {define menuGroup, ApiGen\Index\NamespaceIndex $namespace, int $level = 0}
 	<ul>
 		{foreach $namespace->children as $child}

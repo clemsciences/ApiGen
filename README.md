@@ -40,6 +40,12 @@ ApiGen is easy to use and modern API doc generator **supporting all PHP 8.2 feat
 
 ## Install
 
+1. Install Composer
+2. In project directory, run `composer install`.
+3. `php .\tools\build-phar.php`
+`php tools/apigen.phar --version && php tools/apigen.phar src`
+4. Run `php .\bin\apigen .\api\src\ --output mydoc`
+
 ### With Docker
 
 ApiGen is available as [apigen/apigen](https://hub.docker.com/r/apigen/apigen) Docker image which you can directly use.

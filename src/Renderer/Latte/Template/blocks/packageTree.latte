@@ -1,0 +1,28 @@
+{varType ApiGen\Index\Index $index}
+{varType ApiGen\Renderer\Latte\Template\ConfigParameters $config}
+{varType ApiGen\Renderer\Latte\Template\LayoutParameters $layout}
+
+{define packageTree, ApiGen\Info\PackageLikeInfo $packageLike, ApiGen\Info\PackageLikeInfo[][] $children}
+	{if isClass($packageLike) && $packageLike->extends}
+		{include this, packageLike: $index->packageLike[$packageLike->extends->fullLower], children: [$packageLike->extends->fullLower => [$packageLike]] + $children}
+	{else}
+		{include packageTreeList, packageLikes: [$packageLike], children: $children}
+	{/if}
+{/define}
+
+{define packageTreeList, ApiGen\Info\packageLikeInfo[] $packageLikes, ApiGen\Info\PackageLikeInfo[][] $children}
+	<ul class="classTree">
+		{foreach $packageLikes as $packageLike}
+			{include packageTreeItem, packageLike: $packageLike, children: $children}
+		{/foreach}
+	</ul>
+{/define}
+
+{define local packageTreeItem, ApiGen\Info\PackageLikeInfo $packageLike, ApiGen\Info\PackageLikeInfo[][] $children}
+	<li>
+		{include packageLikeSignature, $classLike}
+		{if !empty($children[$packageLike->name->fullLower])}
+			{include packageTreeList, packageLikes: $children[$packageLike->name->fullLower], children: $children}
+		{/if}
+	</li>
+{/define}

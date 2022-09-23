@@ -3,6 +3,7 @@
 namespace ApiGen\Renderer;
 
 use ApiGen\Index\NamespaceIndex;
+use ApiGen\Index\PackageIndex;
 use ApiGen\Info\ClassLikeInfo;
 use ApiGen\Info\ConstantInfo;
 use ApiGen\Info\EnumCaseInfo;
@@ -89,6 +90,11 @@ class UrlGenerator
 	public function getNamespacePath(NamespaceIndex $namespace): string
 	{
 		return 'namespace-' . strtr($namespace->name->full ?: 'none', '\\', '.') . '.html';
+	}
+
+	public function getPackagePath(PackageIndex $package): string
+	{
+		return 'package-' . strtr($package->name->full ?: 'none', '\\', '.') . '.html';
 	}
 
 

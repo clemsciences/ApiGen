@@ -26,5 +26,11 @@
 			<h3>Enums</h3>
 			{include classTreeList, $index->enum, []}
 		{/if}
+		<h3>Héhé</h3>
+
+		{if $index->package}
+			<h3>Packages</h3>
+			{include packageTreeList, $index->package, []}
+		{/if}
 	{/block}
 {/embed}

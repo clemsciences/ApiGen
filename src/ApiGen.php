@@ -131,17 +131,27 @@ class ApiGen
 
 		foreach ($analyzeResult->classLike as $info) {
 			$this->indexer->indexFile($index, $info->file, $info->primary);
+			// $this->indexer->indexPackage($index, $info->name->full, $info->primary, $info->isDeprecated());
 			$this->indexer->indexNamespace($index, $info->name->namespace, $info->name->namespaceLower, $info->primary, $info->isDeprecated());
 			$this->indexer->indexClassLike($index, $info);
 		}
 
 		foreach ($analyzeResult->function as $info) {
+			// $this->indexer->indexPackage($index, $info->name->full, $info->primary, $info->isDeprecated());
 			$this->indexer->indexFile($index, $info->file, $info->primary);
-            $this->indexer->indexPackage($index, $info->name->full, $info->primary, $info->isDeprecated());
 			$this->indexer->indexNamespace($index, $info->name->namespace, $info->name->namespaceLower, $info->primary, $info->isDeprecated());
 			$this->indexer->indexFunction($index, $info);
 
 		}
+
+		// $packageIndex = [];
+		// foreach ($index->classLike as $info) {
+			// foreach ($info->tags['package'] ?? [] as $value) {
+				// $packageIndex[$value->value][] = $info;
+			// }
+			// $this->indexer->indexPackage($index, $info->name->full, $info->primary, $info->isDeprecated());
+		// }
+		// print_r($packageIndex, true);
 
 		$this->indexer->postProcess($index);
 		return $index;

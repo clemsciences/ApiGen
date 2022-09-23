@@ -7,7 +7,6 @@ use ApiGen\Info\ClassLikeInfo;
 use ApiGen\Info\EnumInfo;
 use ApiGen\Info\FunctionInfo;
 use ApiGen\Info\InterfaceInfo;
-use ApiGen\Info\PackageInfo;
 use ApiGen\Info\TraitInfo;
 
 
@@ -18,6 +17,9 @@ class Index
 
 	/** @var NamespaceIndex[] indexed by [namespaceName] */
 	public array $namespace = [];
+
+	/** @var PackageIndex[] indexed by [packageName]*/
+	public array $package = [];
 
 	/** @var ClassLikeInfo[] indexed by [classLikeName] */
 	public array $classLike = [];
@@ -78,7 +80,4 @@ class Index
 
 	/** @var ClassLikeInfo[][][] indexed by [classLikeName][methodName][], e.g. ['c']['b'] = [A] means method C::b is implemented by A::b */
 	public array $methodImplementedBy = [];
-
-    /** @var PackageIndex[] */
-    public array $package = [];
 }

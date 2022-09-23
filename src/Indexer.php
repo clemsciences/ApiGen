@@ -27,6 +27,7 @@ class Indexer
 {
 
     public function indexPackage(Index $index, string $packageName, bool $primary, bool $deprecated): void {
+			// echo "$packageName\n";
         if (isset($index->package[$packageName] )) {
             if($primary) {
                 for(
@@ -56,8 +57,8 @@ class Indexer
             $this->indexPackage($index, $info->name->full, $primary, $deprecated);
         }
 
-        $index->namespace[$packageName] = $info;
-        $index->namespace[$info->name->namespaceLower]->children[$info->name->full] = $info;
+        $index->package[$packageName] = $info;
+        $index->package[$info->name->full]->children[$info->name->full] = $info;
     }
 
 	public function indexFile(Index $index, ?string $file, bool $primary): void

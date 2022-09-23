@@ -4,6 +4,7 @@ namespace ApiGen\Renderer;
 
 use ApiGen\Index\FileIndex;
 use ApiGen\Index\NamespaceIndex;
+use ApiGen\Index\PackageIndex;
 use ApiGen\Info\ClassLikeInfo;
 use ApiGen\Info\FunctionInfo;
 use ApiGen\Info\MissingInfo;
@@ -38,5 +39,10 @@ class Filter
 	public function filterSourcePage(FileIndex $file): bool
 	{
 		return $file->primary;
+	}
+
+	public function filterPackagePage(PackageIndex $packageIndex): bool
+	{
+		return true;
 	}
 }

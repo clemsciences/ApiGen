@@ -4,6 +4,40 @@
 
 {define menu}
 	<div class="menu">
+		{if $index->package}
+			<div class="menu-section">
+				<h3>Packages</h3>
+				{include menuPackageGroup, package: $index->package}
+			</div>
+		{/if}
+		{if $layout->activePackage}
+			{if $layout->activePackage->class}
+				{include menuElements, elements: $layout->activePackage->class, heading: 'Classes', onlyPrimary: $layout->activePackage->primary}
+			{/if}
+
+			{if $layout->activePackage->interface}
+				{include menuElements, elements: $layout->activePackage->interface, heading: 'Interfaces', onlyPrimary: $layout->activePackage->primary}
+			{/if}
+
+			{if $layout->activePackage->trait}
+				{include menuElements, elements: $layout->activePackage->trait, heading: 'Traits', onlyPrimary: $layout->activePackage->primary}
+			{/if}
+
+			{if $layout->activePackage->enum}
+				{include menuElements, elements: $layout->activePackage->enum, heading: 'Enums', onlyPrimary: $layout->activePackage->primary}
+			{/if}
+
+			{if $layout->activePackage->exception}
+				{include menuElements, elements: $layout->activePackage->exception, heading: 'Exceptions', onlyPrimary: $layout->activePackage->primary}
+			{/if}
+
+			{if $layout->activePackage->function}
+				{include menuElements, elements: $layout->activePackage->function, heading: 'Functions', onlyPrimary: $layout->activePackage->primary}
+			{/if}
+		{/if}
+
+
+
 		{if $index->namespace['']}
 			<div class="menu-section">
 				<h3>Namespaces</h3>

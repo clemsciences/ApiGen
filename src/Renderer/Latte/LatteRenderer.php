@@ -4,6 +4,7 @@ namespace ApiGen\Renderer\Latte;
 
 use ApiGen\Index\Index;
 use ApiGen\Index\NamespaceIndex;
+use ApiGen\Index\PackageIndex;
 use ApiGen\Info\ClassLikeInfo;
 use ApiGen\Info\FunctionInfo;
 use ApiGen\Renderer;
@@ -14,6 +15,7 @@ use ApiGen\Renderer\Latte\Template\FunctionTemplate;
 use ApiGen\Renderer\Latte\Template\IndexTemplate;
 use ApiGen\Renderer\Latte\Template\LayoutParameters;
 use ApiGen\Renderer\Latte\Template\NamespaceTemplate;
+use ApiGen\Renderer\Latte\Template\PackageTemplate;
 use ApiGen\Renderer\Latte\Template\SourceTemplate;
 use ApiGen\Renderer\Latte\Template\TreeTemplate;
 use ApiGen\Renderer\UrlGenerator;
@@ -75,6 +77,7 @@ class LatteRenderer implements Renderer
 			[$this->renderTree(...), $this->filter->filterTreePage() ? [null] : []],
 			[$this->renderNamespace(...), array_filter($index->namespace, $this->filter->filterNamespacePage(...))],
 			[$this->renderClassLike(...), array_filter($index->classLike, $this->filter->filterClassLikePage(...))],
+			[$this->renderPackage(...), array_keys(array_filter($index->package, $this->filter->filterPackagePage(...)))],
 			[$this->renderFunction(...), array_filter($index->function, $this->filter->filterFunctionPage(...))],
 			[$this->renderSource(...), array_keys(array_filter($index->files, $this->filter->filterSourcePage(...)))],
 		];
@@ -125,12 +128,18 @@ class LatteRenderer implements Renderer
 
 			$elements['classLike'][] = [$classLike->name->full, $this->urlGenerator->getClassLikeUrl($classLike), $members];
 		}
+		// foreach ($index->package as $package) {
+		// 	if ($this->filter->filterPackagePage($package)) {
+		// 		$elements['package'][] = [$package->name->full, $this->urlGenerator->getPackagePath($package)];
+		// 	}
+		// }
 
 		foreach ($index->function as $function) {
 			if ($this->filter->filterFunctionPage($function)) {
 				$elements['function'][] = [$function->name->full, $this->urlGenerator->getFunctionUrl($function)];
 			}
 		}
+
 
 		$js = sprintf('window.ApiGen?.resolveElements(%s)', Json::encode($elements));
 		$assetPath = $this->urlGenerator->getAssetPath('elements.js');
@@ -145,7 +154,7 @@ class LatteRenderer implements Renderer
 		return $this->renderTemplate($this->urlGenerator->getIndexPath(), new IndexTemplate(
 			index: $index,
 			config: $config,
-			layout: new LayoutParameters(activePage: 'index', activeNamespace: null, activeElement: null),
+			layout: new LayoutParameters(activePage: 'index', activeNamespace: null, activeElement: null, activePackage: null),
 		));
 	}
 
@@ -155,7 +164,7 @@ class LatteRenderer implements Renderer
 		return $this->renderTemplate($this->urlGenerator->getTreePath(), new TreeTemplate(
 			index: $index,
 			config: $config,
-			layout: new LayoutParameters(activePage: 'tree', activeNamespace: null, activeElement: null),
+			layout: new LayoutParameters(activePage: 'tree', activeNamespace: null, activeElement: null, activePackage: null),
 		));
 	}
 
@@ -165,8 +174,18 @@ class LatteRenderer implements Renderer
 		return $this->renderTemplate($this->urlGenerator->getNamespacePath($info), new NamespaceTemplate(
 			index: $index,
 			config: $config,
-			layout: new LayoutParameters('namespace', $info, activeElement: null),
+			layout: new LayoutParameters('namespace', $info, activeElement: null, activePackage: null),
 			namespace: $info,
+		));
+	}
+
+	protected function renderPackage(Index $index, ConfigParameters $config, PackageIndex $info): string
+	{
+		return $this->renderTemplate($this->urlGenerator->getPackagePath($info), new PackageTemplate(
+			index: $index,
+			config: $config,
+			layout: new LayoutParameters('package', activeElement: null, activeNamespace: null, activePackage: $info),
+			package: $info,
 		));
 	}
 
@@ -178,7 +197,7 @@ class LatteRenderer implements Renderer
 		return $this->renderTemplate($this->urlGenerator->getClassLikePath($info), new ClassLikeTemplate(
 			index: $index,
 			config: $config,
-			layout: new LayoutParameters('classLike', $activeNamespace, $info),
+			layout: new LayoutParameters('classLike', $activeNamespace, $info, activePackage: null),
 			classLike: $info,
 		));
 	}
@@ -191,7 +210,7 @@ class LatteRenderer implements Renderer
 		return $this->renderTemplate($this->urlGenerator->getFunctionPath($info), new FunctionTemplate(
 			index: $index,
 			config: $config,
-			layout: new LayoutParameters('function', $activeNamespace, $info),
+			layout: new LayoutParameters('function', $activeNamespace, $info, activePackage: null),
 			function: $info,
 		));
 	}
@@ -206,7 +225,7 @@ class LatteRenderer implements Renderer
 		return $this->renderTemplate($this->urlGenerator->getSourcePath($path), new SourceTemplate(
 			index: $index,
 			config: $config,
-			layout: new LayoutParameters('source', $activeNamespace, $activeElement),
+			layout: new LayoutParameters('source', $activeNamespace, $activeElement, activePackage: null),
 			path: $path,
 		));
 	}

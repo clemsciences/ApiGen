@@ -1,0 +1,12 @@
+{varType ApiGen\Index\Index $index}
+{varType ApiGen\Renderer\Latte\Template\ConfigParameters $config}
+{varType ApiGen\Renderer\Latte\Template\LayoutParameters $layout}
+
+{define packageLinks, ApiGen\Index\PackageIndex $package}
+	{pre}
+		{if $package->name->full !== ''}
+			{include this, $index->package[$package->name->full]}\
+		{/if}
+		<a n:tag-if="packagePageExists($package)" href="{packageUrl($package)}">{$package->name->full}</a>
+	{/pre}
+{/define}
